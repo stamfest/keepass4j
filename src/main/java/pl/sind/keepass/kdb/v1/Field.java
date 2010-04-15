@@ -14,18 +14,31 @@
  */
 package pl.sind.keepass.kdb.v1;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class Field {
+public abstract class Field {
+	public static final int DATE_FIELD_SIZE = 5;
+	public static final int ID_FIELD_SIZE = 4;
+	public static final int UUID_FIELD_SIZE = 16;
+
 	private short fieldType;
 	private int fieldSize;
 	private byte[] fieldData;
 
-	public Field(short fieldType, int fieldSize, byte[] fieldData) {
+	public Field(short fieldType, int fieldSize, int expectedFieldSize,
+			ByteBuffer data) {
 		super();
+		if (fieldSize != expectedFieldSize) {
+			throw new IllegalArgumentException(String.format(
+					"Invalid field size for %s. Expecting %d found %d."
+							, getClass().getSimpleName(), expectedFieldSize,
+					fieldSize));
+		}
 		this.fieldType = fieldType;
 		this.fieldSize = fieldSize;
-		this.fieldData = fieldData;
+		this.fieldData = new byte[fieldSize];
+		data.get(fieldData);
 	}
 
 	public short getFieldType() {

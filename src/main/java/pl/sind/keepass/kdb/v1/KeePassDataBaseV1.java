@@ -97,7 +97,9 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 			for (int i = 0; i < header.getGroups(); i++) {
 				short fieldType;
 				GroupBuilder builder = new GroupBuilder();
-				while ((fieldType = bb.getShort()) != -1) {
+				
+				while ((fieldType = bb.getShort()) != GroupFieldTypes.TERMINATOR) {
+//					System.out.println(String.format("Group fieldType %x", fieldType));
 					if (fieldType == 0) {
 						continue;
 					}
@@ -107,10 +109,11 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 				bb.getInt(); // reading FIELDSIZE of group entry terminator
 				groups.add(builder.buildGroup());
 			}
+			EntryBuilder builder = new EntryBuilder();
 			for (int i = 0; i < header.getEntries(); i++) {
 				short fieldType;
-				EntryBuilder builder = new EntryBuilder();
-				while ((fieldType = bb.getShort()) != -1) {
+				
+				while ((fieldType = bb.getShort()) != GroupFieldTypes.TERMINATOR) {
 					if (fieldType == 0) {
 						continue;
 					}
@@ -118,7 +121,8 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 					builder.readField(fieldType, fieldSize, bb);
 				}
 				bb.getInt(); // reading FIELDSIZE of entry terminator
-				entries.add(builder.buildEntry());
+				entries.add(builder.createEntry());
+				builder.reset();
 			}
 		} catch (UnsupportedEncodingException e) {
 			// weird...

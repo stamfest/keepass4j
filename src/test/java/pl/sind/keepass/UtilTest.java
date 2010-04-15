@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Test;
@@ -25,9 +26,6 @@ public class UtilTest {
 	public void checkToHex() throws Exception {
 		String ret = Utils.toHexString(referenceBytes);
 		assertEquals(referenceString,ret);
-		FileOutputStream fos = new FileOutputStream("cos.dat");
-		fos.write(referenceBytes);
-		fos.close();
 	}
 
 	@Test
@@ -37,13 +35,29 @@ public class UtilTest {
 	}
 
 	@Test
-	public void checkRoundTrip() throws Exception {
+	public void checkHexRoundTrip() throws Exception {
 		Random r = new Random();
 		byte[] source = new byte[r.nextInt(512)+128];
 		r.nextBytes(source);
 		String testString = Utils.toHexString(source);
 		byte[] result = Utils.fromHexString(testString);
 		assertArrayEquals(source, result);
+	}
+	
+	
+	@Test
+	public void checkIntTrip() throws Exception {
+		Random r = new Random();
+		int source =513; 
+//			(int)4294967294L;
+		System.out.println(Integer.toHexString((int)source));
+		byte[] intTobytes = Utils.intTobytes((int)source);
+		System.out.println(Arrays.toString(intTobytes));
+		System.out.println(Utils.toHexString(intTobytes));
+		
+		int bytesToInt = Utils.bytesToInt(intTobytes);
+		assertEquals(source, bytesToInt);
+		
 	}
 
 }

@@ -30,8 +30,8 @@ public class FactoryTest {
 		KeePassDataBase keePassDb = KeePassDataBaseManager.openDataBase(new File(
 				"testing-key.kdb"), new File("testing-key.key"), null);
 		KeePassDataBaseV1 kdb1 = (KeePassDataBaseV1) keePassDb; 
-		kdb1.getGroups();
-		kdb1.getEntries();
+		System.out.println(kdb1.getGroups());
+		System.out.println(kdb1.getEntries());
 		assertNotNull(keePassDb);
 	}
 	
@@ -40,8 +40,8 @@ public class FactoryTest {
 		KeePassDataBase keePassDb = KeePassDataBaseManager.openDataBase(new File(
 				"testing-pass-key.kdb"), new File("testing-key.key"), "testing");
 		KeePassDataBaseV1 kdb1 = (KeePassDataBaseV1) keePassDb; 
-		kdb1.getGroups();
-		kdb1.getEntries();
+		System.out.println(kdb1.getGroups());
+		System.out.println(kdb1.getEntries());
 		assertNotNull(keePassDb);
 	}
 

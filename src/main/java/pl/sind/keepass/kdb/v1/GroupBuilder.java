@@ -77,8 +77,8 @@ public class GroupBuilder {
                 data.getInt();
                 break;
             default: // Group entry terminator, FIELDSIZE must be 0
-            	System.out.println(">>> fieldType: "+fieldType);
-            	System.out.println(">>> fieldSize: "+fieldSize);
+//            	System.out.println(">>> fieldType: "+fieldType);
+//            	System.out.println(">>> fieldSize: "+fieldSize);
                 break;
         }
     }

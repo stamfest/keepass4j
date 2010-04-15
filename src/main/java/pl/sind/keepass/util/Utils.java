@@ -26,7 +26,7 @@ import java.util.Date;
 public class Utils {
 
 	/**
-	 * Unpacks date stored in kdb format. 
+	 * Unpacks date stored in kdb format.
 	 * 
 	 * @param d
 	 * @return
@@ -44,8 +44,8 @@ public class Utils {
 		calendar.set(year, month, day, hour, minute, second);
 		return calendar.getTime();
 	}
-	
-	public static byte[] unpackDate(Date date) {
+
+	public static byte[] packDate(Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		// Byte bits: 11111111 22222222 33333333 44444444 55555555
@@ -55,11 +55,9 @@ public class Utils {
 		int m = c.get(Calendar.MINUTE);
 		int h = c.get(Calendar.HOUR_OF_DAY);
 		int d = c.get(Calendar.DATE);
-		int mm = c.get(Calendar.MONTH)+1;
+		int mm = c.get(Calendar.MONTH) + 1;
 		int y = c.get(Calendar.YEAR);
-		
-		
-		
+
 		return bytes;
 	}
 
@@ -99,5 +97,30 @@ public class Utils {
 		}
 		return sb.toString();
 	}
-	
+
+	public static int bytesToInt(byte[] data) {
+		
+		int value=(data[3] & 0xff);
+		value =value << 8;
+		value|=(data[2] & 0xff);
+		value <<= 8;
+		value|=(data[1] & 0xff);
+		value <<= 8;
+		value|=(data[0] & 0xff);
+		return value;
+	}
+
+	public static byte[] intTobytes(int value) {
+		byte[] bytes = new byte[4];
+		intTobytes(value, bytes);
+		return bytes;
+	}
+
+	public static void intTobytes(int value, byte[] bytes) {
+		bytes[3] = (byte) (value >> 24 & 0xff);
+		bytes[2] = (byte) (value >> 16 & 0xff);
+		bytes[1] = (byte) (value >> 8 & 0xff);
+		bytes[0] = (byte) (value & 0xff);
+	}
+
 }

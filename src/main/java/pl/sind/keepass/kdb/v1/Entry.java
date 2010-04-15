@@ -15,132 +15,159 @@
 package pl.sind.keepass.kdb.v1;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 
 
 public class Entry {
-    private String uuid;
-    private int groupId;
-    private String title;
-    private String url;
-    private String username;
-    private String password;
-    private String notes;
-    private Date creationTime;
-    private Date lastModificationTime;
-    private Date lastAccessTime;
-    private Date expirationTime;
-    private String binaryDescription;
-    private byte[] binaryData;
+	
+    private UUIDField uuid;
+    private IdField groupId;
+    private TextField title;
+    private TextField url;
+    private TextField username;
+    private TextField password;
+    private TextField notes;
+    private DateField creationTime;
+    private DateField lastModificationTime;
+    private DateField lastAccessTime;
+    private DateField expirationTime;
+    private TextField binaryDescription;
+    private BinnaryField binaryData;
 
-    public String getUuid() {
-        return uuid;
+
+
+	public Entry(UUIDField uuid, IdField groupId, TextField title,
+			TextField url, TextField username, TextField password,
+			TextField notes, DateField creationTime,
+			DateField lastModificationTime, DateField lastAccessTime,
+			DateField expirationTime, TextField binaryDescription,
+			BinnaryField binaryData) {
+		super();
+		this.uuid = uuid;
+		this.groupId = groupId;
+		this.title = title;
+		this.url = url;
+		this.username = username;
+		this.password = password;
+		this.notes = notes;
+		this.creationTime = creationTime;
+		this.lastModificationTime = lastModificationTime;
+		this.lastAccessTime = lastAccessTime;
+		this.expirationTime = expirationTime;
+		this.binaryDescription = binaryDescription;
+		this.binaryData = binaryData;
+	}
+
+	public String getUuid() {
+        return uuid.getUuid();
     }
 
     protected void setUuid(String uuid) {
-        this.uuid = uuid;
+        this.uuid.setUuid(uuid);
     }
 
     public int getGroupId() {
-        return groupId;
+        return groupId.getId();
     }
 
     protected void setGroupId(int groupId) {
-        this.groupId = groupId;
+        this.groupId.setId(groupId);
     }
 
     public String getTitle() {
-        return title;
+        return title.getText();
     }
 
     protected void setTitle(String title) {
-        this.title = title;
+        this.title.setText(title);
     }
 
     public String getUrl() {
-        return url;
+        return url.getText();
     }
 
     protected void setUrl(String url) {
-        this.url = url;
+        this.url.setText(url);
     }
 
     public String getUsername() {
-        return username;
+        return username.getText();
     }
 
     protected void setUsername(String username) {
-        this.username = username;
+        this.username.setText(username);
     }
 
     public String getPassword() {
-        return password;
+        return password.getText();
     }
 
     protected void setPassword(String password) {
-        this.password = password;
+        this.password.setText(password);
     }
 
     public String getNotes() {
-        return notes;
+        return notes.getText();
     }
 
     protected void setNotes(String notes) {
-        this.notes = notes;
+        this.notes.setText(notes);
     }
 
     public Date getCreationTime() {
-        return creationTime;
+        return creationTime.getDate();
     }
 
     protected void setCreationTime(Date creationTime) {
-        this.creationTime = creationTime;
+        this.creationTime.setDate(creationTime);
     }
 
     public Date getLastModificationTime() {
-        return lastModificationTime;
+        return lastModificationTime.getDate();
     }
 
     protected void setLastModificationTime(Date lastModificationTime) {
-        this.lastModificationTime = lastModificationTime;
+        this.lastModificationTime.setDate(lastModificationTime);
     }
 
     public Date getLastAccessTime() {
-        return lastAccessTime;
+        return lastAccessTime.getDate();
     }
 
     protected void setLastAccessTime(Date lastAccessTime) {
-        this.lastAccessTime = lastAccessTime;
+        this.lastAccessTime.setDate(lastAccessTime);
     }
 
     public Date getExpirationTime() {
-        return expirationTime;
+        return expirationTime.getDate();
     }
 
     protected void setExpirationTime(Date expirationTime) {
-        this.expirationTime = expirationTime;
+        this.expirationTime.setDate(expirationTime);
     }
 
     public String getBinaryDescription() {
-        return binaryDescription;
+        return binaryDescription.getText();
     }
 
     protected void setBinaryDescription(String binaryDescription) {
-        this.binaryDescription = binaryDescription;
+    	this.binaryDescription.setText(binaryDescription);
     }
 
     public byte[] getBinaryData() {
-        return binaryData;
+        return binaryData.getFieldData();
     }
 
     protected void setBinaryData(byte[] binaryData) {
-        this.binaryData = binaryData;
+        this.binaryData.setFieldData(binaryData);
+        this.binaryData.setFieldSize(binaryData==null?0:binaryData.length);
     }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append('{');
-        sb.append("gid=").append(Integer.toHexString(this.groupId));
+        sb.append("gid=").append(Integer.toHexString(this.groupId.getId()));
         sb.append(", ");
         sb.append("title=").append(this.title);
         sb.append(", ");
