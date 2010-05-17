@@ -32,23 +32,23 @@ public class Utils {
 	 * @return
 	 */
 	public static Date unpackDate(byte[] d) {
-		// Byte bits: 11111111 22222222 33333333 44444444 55555555
+		// Byte bits: 00000000 11111111 22222222 33333333 44444444
 		// Contents : 00YYYYYY YYYYYYMM MMDDDDDH HHHHMMMM MMSSSSSS
 		int year = (d[0] << 6) | ((d[1] >> 2) & 0x0000003F);
 		int month = ((d[1] & 0x00000003) << 2) | ((d[2] >> 6) & 0x00000003);
-		int day = (d[2] << 1) & 0x0000001F;
+		int day = (d[2] >> 1) & 0x0000001F;
 		int hour = ((d[2] & 0x00000001) << 4) | ((d[3] >> 4) & 0x0000000F);
 		int minute = ((d[3] & 0x0000000F) << 2) | ((d[4] >> 6) & 0x00000003);
 		int second = d[4] & 0x0000003F;
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month, day, hour, minute, second);
+		calendar.set(year, month-1, day, hour, minute, second);
 		return calendar.getTime();
 	}
 
 	public static byte[] packDate(Date date) {
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		// Byte bits: 11111111 22222222 33333333 44444444 55555555
+		// Byte bits: 00000000 11111111 22222222 33333333 44444444
 		// Contents : 00YYYYYY YYYYYYMM MMDDDDDH HHHHMMMM MMSSSSSS
 		byte[] bytes = new byte[5];
 		int s = c.get(Calendar.SECOND);
@@ -99,7 +99,6 @@ public class Utils {
 	}
 
 	public static int bytesToInt(byte[] data) {
-		
 		int value=(data[3] & 0xff);
 		value =value << 8;
 		value|=(data[2] & 0xff);
@@ -109,6 +108,8 @@ public class Utils {
 		value|=(data[0] & 0xff);
 		return value;
 	}
+	
+	
 
 	public static byte[] intTobytes(int value) {
 		byte[] bytes = new byte[4];
@@ -121,6 +122,19 @@ public class Utils {
 		bytes[2] = (byte) (value >> 16 & 0xff);
 		bytes[1] = (byte) (value >> 8 & 0xff);
 		bytes[0] = (byte) (value & 0xff);
+	}
+	
+	public static void shortTobytes(short value, byte[] bytes) {
+		bytes[1] = (byte) (value >> 8 & 0xff);
+		bytes[0] = (byte) (value & 0xff);
+	}
+	
+	
+	public static short bytesToShort(byte[] data) {
+		short value=(short) (data[1] & 0xff);
+		value <<= 8;
+		value|=(data[0] & 0xff);
+		return value;
 	}
 
 }
