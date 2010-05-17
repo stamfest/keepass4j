@@ -100,22 +100,22 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 		this.groups = new ArrayList<Group>();
 		try {
 			bb = ByteBuffer.wrap(result).order(ByteOrder.LITTLE_ENDIAN);
+			GroupDeserializer groupsDes = new GroupDeserializer();
 			for (int i = 0; i < header.getGroups(); i++) {
 				short fieldType;
-				GroupBuilder builder = new GroupBuilder();
-				
 				while ((fieldType = bb.getShort()) != GroupFieldTypes.TERMINATOR) {
 //					System.out.println(String.format("Group fieldType %x", fieldType));
 					if (fieldType == 0) {
 						continue;
 					}
 					int fieldSize = bb.getInt();
-					builder.readField(fieldType, fieldSize, bb);
+					groupsDes.readField(fieldType, fieldSize, bb);
 				}
 				bb.getInt(); // reading FIELDSIZE of group entry terminator
-				groups.add(builder.buildGroup());
+				groups.add(groupsDes.getGroup());
+				groupsDes.reset();
 			}
-			EntryDeserializer builder = new EntryDeserializer();
+			EntryDeserializer entryDes = new EntryDeserializer();
 			for (int i = 0; i < header.getEntries(); i++) {
 				short fieldType;
 				
@@ -124,10 +124,11 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 						continue;
 					}
 					int fieldSize = bb.getInt();
-					builder.readField(fieldType, fieldSize, bb);
+					entryDes.readField(fieldType, fieldSize, bb);
 				}
 				bb.getInt(); // reading FIELDSIZE of entry terminator
-				entries.add(builder.getEntry());
+				entries.add(entryDes.getEntry());
+				entryDes.reset();
 			}
 		} catch (UnsupportedEncodingException e) {
 			// weird...

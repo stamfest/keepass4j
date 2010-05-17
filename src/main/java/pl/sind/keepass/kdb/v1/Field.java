@@ -20,6 +20,8 @@ import java.util.Arrays;
 public class Field {
 	public static final int DATE_FIELD_SIZE = 5;
 	public static final int ID_FIELD_SIZE = 4;
+	public static final int FLAGS_FIELD_SIZE = 4;
+	public static final int LEVEL_FIELD_SIZE = 2;
 	public static final int UUID_FIELD_SIZE = 16;
 
 	private short fieldType;

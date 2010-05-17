@@ -40,7 +40,7 @@ public class EntryDeserializer {
 	public void readField(short fieldType, int fieldSize, ByteBuffer data)
 			throws UnsupportedEncodingException {
 		switch (fieldType) {
-		case 0x0000: // Invalid or comment block, block is ignored
+		case 0x0000: // Invalid or comment block
             comments.add(new Field(fieldType,fieldSize,fieldSize, data));
             break;
         case 0x0001: // UUID, uniquely identifying an entry, FIELDSIZE must be 16
