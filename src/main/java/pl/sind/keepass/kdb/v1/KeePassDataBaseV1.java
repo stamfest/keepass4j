@@ -39,6 +39,13 @@ import pl.sind.keepass.hash.HashFactory;
 import pl.sind.keepass.kdb.KeePassDataBase;
 import pl.sind.keepass.util.Utils;
 
+/**
+ * KDB file database format reader.
+ * Supports password, keyfile and password+keyfile database access.
+ * 
+ * @author Lukasz Wozniak
+ *
+ */
 public class KeePassDataBaseV1 implements KeePassDataBase {
 	// private HeaderV1 header;
 	private byte[] keyFileHash;
@@ -73,7 +80,6 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 
 		byte[] content = new byte[data.length - bb.position()];
 		bb.get(content, 0, content.length);
-		// System.out.println(Utils.toHexString(content));
 
 		masterSeed = header.getMasterSeed();
 		masterSeed2 = header.getMasterSeed2();
@@ -109,7 +115,7 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 				bb.getInt(); // reading FIELDSIZE of group entry terminator
 				groups.add(builder.buildGroup());
 			}
-			EntryBuilder builder = new EntryBuilder();
+			EntryDeserializer builder = new EntryDeserializer();
 			for (int i = 0; i < header.getEntries(); i++) {
 				short fieldType;
 				

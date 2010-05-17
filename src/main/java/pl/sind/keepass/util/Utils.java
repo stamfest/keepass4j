@@ -42,6 +42,7 @@ public class Utils {
 		int second = d[4] & 0x0000003F;
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, month-1, day, hour, minute, second);
+		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTime();
 	}
 
@@ -58,6 +59,12 @@ public class Utils {
 		int mm = c.get(Calendar.MONTH) + 1;
 		int y = c.get(Calendar.YEAR);
 
+		bytes[4] = (byte) ((m << 6) | s); 
+		bytes[3] = (byte) ((m >> 2 )| (h<<4));
+		bytes[2] = (byte) ((h>>4) | (d<<1) | (mm <<6));
+		bytes[1] = (byte) ((mm>>2) | (y<<2));
+		bytes[0] = (byte) (y>>6);
+		
 		return bytes;
 	}
 
