@@ -2,11 +2,9 @@ package pl.sind.keepass;
 
 import static org.junit.Assert.assertArrayEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import pl.sind.keepass.crypto.CipherException;
-import pl.sind.keepass.hash.BcSHA256Hash;
 import pl.sind.keepass.hash.Hash;
 
 public abstract class HashTestBase {

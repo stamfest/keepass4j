@@ -17,7 +17,7 @@ package pl.sind.keepass.kdb.v1;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public abstract class Field {
+public class Field {
 	public static final int DATE_FIELD_SIZE = 5;
 	public static final int ID_FIELD_SIZE = 4;
 	public static final int UUID_FIELD_SIZE = 16;

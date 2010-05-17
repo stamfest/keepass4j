@@ -121,8 +121,7 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 					builder.readField(fieldType, fieldSize, bb);
 				}
 				bb.getInt(); // reading FIELDSIZE of entry terminator
-				entries.add(builder.createEntry());
-				builder.reset();
+				entries.add(builder.getEntry());
 			}
 		} catch (UnsupportedEncodingException e) {
 			// weird...

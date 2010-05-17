@@ -15,7 +15,6 @@
 package pl.sind.keepass.kdb.v2;
 
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 import pl.sind.keepass.kdb.KeePassDataBase;
 

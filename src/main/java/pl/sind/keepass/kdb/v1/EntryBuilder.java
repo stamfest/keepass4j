@@ -16,6 +16,7 @@ package pl.sind.keepass.kdb.v1;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 
 public class EntryBuilder {
@@ -33,10 +34,13 @@ public class EntryBuilder {
     private DateField expirationTime;
     private TextField binaryDescription;
     private BinnaryField binaryData;
+    private ArrayList<Field> comments = new ArrayList<Field>();
+	private ArrayList<Field> unknowns = new ArrayList<Field>();
     
     public void readField(short fieldType, int fieldSize, ByteBuffer data) throws UnsupportedEncodingException {
         switch (fieldType) {
             case 0x0000: // Invalid or comment block, block is ignored
+            	comments.add(new Field(fieldType,fieldSize,fieldSize, data));
             	break;
             case 0x0001: // UUID, uniquely identifying an entry, FIELDSIZE must be 16
                 uuid= new UUIDField(fieldType, fieldSize, data);
@@ -81,20 +85,21 @@ public class EntryBuilder {
             	binaryData= new BinnaryField(fieldType, fieldSize, data);
             	break;
             default: 
-            	throw new IllegalArgumentException("Unsupported fie");
+            	unknowns.add(new Field(fieldType,fieldSize,fieldSize, data));
         }
 
     }
     
-	public Entry createEntry() {
-		return new Entry(uuid, groupId, title, url, username, password, notes,
+	public Entry getEntry() {
+		return new Entry(uuid, groupId,imageId, title, url, username, password, notes,
 				creationTime, lastModificationTime, lastAccessTime,
-				expirationTime, binaryDescription, binaryData);
+				expirationTime, binaryDescription, binaryData,unknowns, comments);
 	}
 	
 	public void reset() {
 		uuid = null;
 		groupId = null;
+		imageId = null;
 		title = null;
 		url = null;
 		username = null;
@@ -106,6 +111,8 @@ public class EntryBuilder {
 		expirationTime = null;
 		binaryDescription = null;
 		binaryData = null;
+		unknowns.clear();
+		comments.clear();
 
 	}
 }

@@ -1,6 +1,5 @@
 package pl.sind.keepass.kdb.v1;
 
-import pl.sind.keepass.util.Utils;
 
 public final class GroupFieldTypes {
 public static final short INVALID_OR_COMMENT= 0x0000; // Invalid or comment block, block is ignored
