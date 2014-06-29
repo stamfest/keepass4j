@@ -31,6 +31,7 @@ public class GroupDeserializer {
     private DateField expirationTime;
     private LevelField level;
     private FlagsField flags;
+    private ImageField image;
     private ArrayList<Field> comments = new ArrayList<Field>();
     private ArrayList<Field> unknowns = new ArrayList<Field>();
 
@@ -58,7 +59,7 @@ public class GroupDeserializer {
                 this.expirationTime = new DateField(fieldType, fieldSize, data);
                 break;
             case 0x0007: // Image ID, FIELDSIZE must be 4 bytes
-                data.getInt();
+		this.image = new ImageField(fieldType, fieldSize, data);
                 break;
             case 0x0008: // Level, FIELDSIZE = 2
                 this.level = new LevelField(fieldType, fieldSize, data);
@@ -76,7 +77,7 @@ public class GroupDeserializer {
 	public Group getGroup() {
 		return new Group(groupId, groupName, creationTime,
 				lastModificationTime, lastAccessTime, expirationTime, level,
-				flags, comments, unknowns);
+				flags, image, comments, unknowns);
 	}
 	
 	public void reset() {

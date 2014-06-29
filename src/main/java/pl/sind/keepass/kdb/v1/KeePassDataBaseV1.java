@@ -1,5 +1,7 @@
 /*
  * Copyright 2009 Lukasz Wozniak
+ * Copyright 2014 Peter Stamfest
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
  * You may obtain a copy of the License at 
@@ -21,6 +23,7 @@ import static pl.sind.keepass.kdb.KeePassConst.KDB_FLAG_TWOFISH;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -138,8 +141,77 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 
 	}
 
+       /**
+	 * Write a copy of the database to an OutputStream. Password and keyfile
+	* should already have been set. Every copy will be written with a different
+	* header information, that is seeds and IVs will be different. 
+	* 
+	* Calling this method will change the internal (cryptographic) state to 
+	* refer to the newly written file.
+	*/
+	public void write_copy_to_stream(OutputStream out) throws IOException, KeePassDataBaseException {
+	    try {
+		HeaderV1 header = new HeaderV1();
+		header.setGroups(groups.size());
+		header.setEntries(entries.size());
+		
+		hash = HashFactory.getHash(Hash.SHA_256);
+		cipher = CipherFactory.getCipher(Cipher.AES);
+		
+		masterSeed = header.getMasterSeed();
+		masterSeed2 = header.getMasterSeed2();
+		encryptionIv = header.getEncryptionIV();
+		keyEncRounds = header.getKeyEncRounds();
+		
+
+		int total_length = 0;
+		// calculate buffer size....
+		for (Group g : groups) {
+		    total_length += GroupSerializer.serialize(g, null);
+		}
+		
+		for (Entry e: entries) {
+		    total_length += EntrySerializer.serialize(e, null);
+		}
+
+    		ByteBuffer bb = ByteBuffer.allocate(total_length);
+		bb.order(ByteOrder.LITTLE_ENDIAN);
+
+		// serialize groups:
+
+		for (Group g : groups) {
+		    GroupSerializer.serialize(g, bb);
+		}
+
+		// serialize entries:
+		for (Entry e : entries) {
+		    EntrySerializer.serialize(e, bb);
+		}
+		
+		byte[] plaintext_content = bb.array();
+		
+		header.setContentsHash(hash.hash(plaintext_content));
+		
+		validateHeader(header);
+		
+		byte h[] = header.getHeader();
+		out.write(h);
+		
+		byte[] content = encrypt(plaintext_content);
+		
+		out.write(content);
+		Arrays.fill(plaintext_content, (byte) 0x5e);
+	    } catch (CipherException ex) {
+		throw new KeePassDataBaseException("encryption failed", ex);
+	    }
+	}
+	
+	
 	private byte[] decrypt(byte[] content) throws CipherException {
 		return cipher.decrypt(prepareKey(), content, encryptionIv);
+	}
+	private byte[] encrypt(byte[] content) throws CipherException {
+		return cipher.encrypt(prepareKey(), content, encryptionIv, 1, true);
 	}
 
 	private byte[] prepareKey() throws CipherException {
@@ -167,8 +239,15 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 	}
 
 	public void setPassword(String password) {
+		if (password == null)
+		    passwordHash = null;
+		else
+		    setPassword(password.getBytes());
+	}
+
+	public void setPassword(byte password[]) {
 		if (password != null) {
-			this.passwordHash = hash.hash(password.getBytes());
+			this.passwordHash = hash.hash(password);
 		} else {
 			this.passwordHash = null;
 		}

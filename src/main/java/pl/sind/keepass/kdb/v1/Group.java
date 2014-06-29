@@ -27,14 +27,22 @@ public class Group {
     private DateField expirationTime;
     private LevelField level;
     private FlagsField flags;
+    private ImageField image;
     private List<Field> comments;
     private List<Field> unknowns;
     
 
-	public Group(IdField groupId, TextField groupName, DateField creationTime,
-			DateField lastModificationTime, DateField lastAccessTime,
-			DateField expirationTime, LevelField level, FlagsField flags,
-			List<Field> comments, List<Field> unknowns) {
+	public Group(IdField groupId,
+		     TextField groupName, 
+		     DateField creationTime,
+		     DateField lastModificationTime,
+		     DateField lastAccessTime, 
+		     DateField expirationTime,
+		     LevelField level, 
+		     FlagsField flags, 
+		     ImageField image, 
+		     List<Field> comments, 
+		     List<Field> unknowns) {
 		super();
 		this.groupId = groupId;
 		this.groupName = groupName;
@@ -44,6 +52,7 @@ public class Group {
 		this.expirationTime = expirationTime;
 		this.level = level;
 		this.flags = flags;
+		this.image = image;
 		this.comments = comments;
 		this.unknowns = unknowns;
 	}
@@ -233,6 +242,20 @@ public class Group {
 				+ ", lastModificationTime=" + lastModificationTime
 				+ ", comments=" + comments + ", unknowns=" + unknowns + "]";
 	}
+
+    /**
+     * @return the image
+     */
+    public ImageField getImage() {
+	return image;
+    }
+
+    /**
+     * @param image the image to set
+     */
+    public void setImage(ImageField image) {
+	this.image = image;
+    }
 
     
 }
