@@ -78,7 +78,7 @@ public class KdbV1WriteTest {
 	@Test 
 	public void writeNew() throws IOException, KeePassDataBaseException {
 		KeePassDataBaseV1 keePassDb = new KeePassDataBaseV1();
-		keePassDb.setPassword("lalelu");
+		keePassDb.setPassword("lalelu".getBytes());
 		List<Group> groups = keePassDb.getGroups();
 		List<Entry> entries = keePassDb.getEntries();
 		
@@ -90,12 +90,12 @@ public class KdbV1WriteTest {
 		groups.add(g);
 		
 		Entry e1 = new Entry();
-		e1.set(1, null, "Entry 1", null, "user1", "pass1", null,
+		e1.set(1, null, "Entry 1", null, "user1", "pass1".getBytes(), null,
 		       now, now, now, null, null, null, null);
 		entries.add(e1);
 		
 		Entry e2 = new Entry();
-		e2.set(1, null, "Entry 2", null, "user2", "pass2", null,
+		e2.set(1, null, "Entry 2", null, "user2", "pass2".getBytes(), null,
 		       now, now, now, null, null, null, null);
 		
 		entries.add(e2);

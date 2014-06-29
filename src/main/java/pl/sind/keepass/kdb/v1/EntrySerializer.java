@@ -22,8 +22,13 @@ import java.util.ArrayList;
 /** @author Peter Stamfest */
 public class EntrySerializer {
     public static int serialize(Entry e, ByteBuffer bb) {
-	ArrayList<Field> allFields = new ArrayList<Field>();
+	ArrayList<Field> allFields = getAllFields(e);
+	
+	return GroupSerializer.serializeFields(allFields, bb);
+    }
 
+    public static ArrayList<Field> getAllFields(Entry e) {
+	ArrayList<Field> allFields = new ArrayList<Field>();
 	allFields.add(e.getUuid());
 	allFields.add(e.getBinaryData());
 	allFields.add(e.getBinaryDescription());
@@ -40,8 +45,7 @@ public class EntrySerializer {
 	allFields.add(e.getUsername());
 	allFields.addAll(e.getComments());
 	allFields.addAll(e.getUnknowns());
-	
-	return GroupSerializer.serializeFields(allFields, bb);
+	return allFields;
     }
 
 }

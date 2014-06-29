@@ -28,6 +28,7 @@ public class Field {
 	private short fieldType;
 	private int fieldSize;
 	private byte[] fieldData;
+        public static final byte OVERWRITE = 0x5a;
 
 	public Field(short fieldType, int fieldSize, int expectedFieldSize,
 			ByteBuffer data) {
@@ -117,5 +118,11 @@ public class Field {
 			return false;
 		return true;
 	}
+
+    void clear() {
+	if (fieldData != null) {
+	    Arrays.fill(fieldData, OVERWRITE);
+	}
+    }
 
 }

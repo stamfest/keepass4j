@@ -110,6 +110,7 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 		}
 
 		if (!Arrays.equals(hash.hash(result), header.getContentsHash())) {
+			Arrays.fill(result, Field.OVERWRITE);
 			throw new DecryptionFailedException(
 					"Data corrupted or invalid password or key file.");
 		}
@@ -152,6 +153,8 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 			// weird...
 			throw new KeePassDataBaseException(
 					"UTF-8 is not supported on this platform");
+		} finally {
+		    Arrays.fill(result, Field.OVERWRITE);
 		}
 
 	}
@@ -215,7 +218,7 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 		byte[] content = encrypt(plaintext_content);
 		
 		out.write(content);
-		Arrays.fill(plaintext_content, (byte) 0x5e);
+		Arrays.fill(plaintext_content, Field.OVERWRITE);
 	    } catch (CipherException ex) {
 		throw new KeePassDataBaseException("encryption failed", ex);
 	    }
@@ -337,4 +340,24 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 		return groups;
 	}
 
+	/* this operation will overwrite all data in all entries */
+	public void clear() {
+	    for (Entry e : getEntries()) {
+		for(Field f: EntrySerializer.getAllFields(e)) {
+		    f.clear();
+		}
+	    }
+	    for (Group g: getGroups()) {
+		for (Field f : GroupSerializer.getAllFields(g)) {
+		    f.clear();
+		}
+	    }
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+	    super.finalize();
+	    /* try to make sure sensitive information really gets overwritten */
+	    clear();
+	}
 }

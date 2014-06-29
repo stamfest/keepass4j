@@ -27,19 +27,7 @@ import java.util.Comparator;
  */
 public class GroupSerializer {
     public static int serialize(Group g, ByteBuffer bb) {
-	ArrayList<Field> allFields = new ArrayList<Field>();
-
-	allFields.add(g.getGroupId());
-	allFields.add(g.getGroupName());
-	allFields.add(g.getCreationTime());
-	allFields.add(g.getLastModificationTime());
-	allFields.add(g.getLastAccessTime());
-	allFields.add(g.getExpirationTime());
-	allFields.add(g.getImage());
-	allFields.add(g.getLevel());
-	allFields.add(g.getFlags());
-	allFields.addAll(g.getComments());
-	allFields.addAll(g.getUnknowns());
+	ArrayList<Field> allFields = getAllFields(g);
 	
 	return serializeFields(allFields, bb);
     }
@@ -88,5 +76,21 @@ public class GroupSerializer {
 	    bb.putInt(0);
 	}
 	return total_length;
+    }
+
+    public static ArrayList<Field> getAllFields(Group g) {
+	ArrayList<Field> allFields = new ArrayList<Field>();
+	allFields.add(g.getGroupId());
+	allFields.add(g.getGroupName());
+	allFields.add(g.getCreationTime());
+	allFields.add(g.getLastModificationTime());
+	allFields.add(g.getLastAccessTime());
+	allFields.add(g.getExpirationTime());
+	allFields.add(g.getImage());
+	allFields.add(g.getLevel());
+	allFields.add(g.getFlags());
+	allFields.addAll(g.getComments());
+	allFields.addAll(g.getUnknowns());
+	return allFields;
     }
 }
