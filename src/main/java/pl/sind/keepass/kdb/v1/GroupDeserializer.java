@@ -1,5 +1,7 @@
 /*
  * Copyright 2009 Lukasz Wozniak
+ * (c) 2014 Peter Stamfest
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
  * You may obtain a copy of the License at 
@@ -17,10 +19,6 @@ package pl.sind.keepass.kdb.v1;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import pl.sind.keepass.util.Utils;
 
 public class GroupDeserializer {
     private IdField groupId;
