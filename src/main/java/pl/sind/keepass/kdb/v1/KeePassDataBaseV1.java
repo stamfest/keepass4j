@@ -342,14 +342,18 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 
 	/* this operation will overwrite all data in all entries */
 	public void clear() {
-	    for (Entry e : getEntries()) {
-		for(Field f: EntrySerializer.getAllFields(e)) {
-		    f.clear();
+	    if (entries != null) {
+		for (Entry e : entries) {
+		    for(Field f: EntrySerializer.getAllFields(e)) {
+			if (f != null) f.clear();
+		    }
 		}
 	    }
-	    for (Group g: getGroups()) {
-		for (Field f : GroupSerializer.getAllFields(g)) {
-		    f.clear();
+	    if (groups != null) {
+		for (Group g: groups) {
+		    for (Field f : GroupSerializer.getAllFields(g)) {
+			if (f != null) f.clear();
+		    }
 		}
 	    }
 	}
