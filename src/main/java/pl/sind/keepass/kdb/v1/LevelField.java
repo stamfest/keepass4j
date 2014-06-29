@@ -10,6 +10,11 @@ public class LevelField extends Field {
 		super(fieldType, fieldSize, LEVEL_FIELD_SIZE, data);
 	}
 
+        LevelField(short fieldType, short level) {
+		super(fieldType, 
+		      Utils.shortTobytes(level));
+	}
+
 	public void setLevel(short value) {
 		Utils.shortTobytes(value,getFieldData());
 	}

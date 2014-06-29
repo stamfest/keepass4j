@@ -8,4 +8,8 @@ public class BinnaryField extends Field {
 		super(fieldType, fieldSize,fieldSize, data);
 	}
 
+	public BinnaryField(short fieldType, byte[] binaryData) {
+	       super(fieldType, binaryData);
+	}
+
 }

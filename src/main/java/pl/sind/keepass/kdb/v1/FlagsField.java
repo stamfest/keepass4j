@@ -10,6 +10,10 @@ public class FlagsField extends Field {
 		super(fieldType, fieldSize, FLAGS_FIELD_SIZE, data);
 	}
 
+	public FlagsField(short fieldType, int flags) {
+		super(fieldType, flags);
+	}
+
 	public void setId(int value) {
 		Utils.intTobytes(value,getFieldData());
 	}

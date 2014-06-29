@@ -13,6 +13,10 @@ public class TextField extends Field {
 		data.get();
 	}
 	
+	public TextField(short fieldType, String text) {
+		super(fieldType, text.getBytes(CHARSET));
+	}
+	
 	public String getText() {
 		return new String(getFieldData(),CHARSET);
 	}

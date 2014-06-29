@@ -46,7 +46,13 @@ import pl.sind.keepass.util.Utils;
  * KDB file database format reader.
  * Supports password, keyfile and password+keyfile database access.
  * 
+ * New databases may be created through the default constructor. Objects expose
+ * the internal group/entry structure by providing access to the internal
+ * group/entry collections. Users are allowed (but responsible) to change those
+ * collections.
+  * 
  * @author Lukasz Wozniak
+ * @author Peter Stamfest
  *
  */
 public class KeePassDataBaseV1 implements KeePassDataBase {
@@ -62,6 +68,15 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 	private byte[] masterSeed2;
 	private byte[] encryptionIv;
 
+	/** Create an empty database */
+	public KeePassDataBaseV1() {
+	        entries = new ArrayList<Entry>();
+		groups  = new ArrayList<Group>();
+		
+		hash = HashFactory.getHash(Hash.SHA_256);
+		cipher = CipherFactory.getCipher(Cipher.AES);
+	}
+	
 	public KeePassDataBaseV1(byte[] data, InputStream keyFile, String password)
 			throws UnsupportedDataBaseException, KeePassDataBaseException {
 		super();
@@ -83,7 +98,7 @@ public class KeePassDataBaseV1 implements KeePassDataBase {
 
 		byte[] content = new byte[data.length - bb.position()];
 		bb.get(content, 0, content.length);
-
+		
 		masterSeed = header.getMasterSeed();
 		masterSeed2 = header.getMasterSeed2();
 		encryptionIv = header.getEncryptionIV();

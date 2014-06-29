@@ -14,6 +14,8 @@
  */
 package pl.sind.keepass.kdb.v1;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -57,6 +59,64 @@ public class Group {
 		this.unknowns = unknowns;
 	}
 
+	public void set(int id,
+			String groupName, 
+			Date creationTime, 
+			Date lastModificationTime,  
+			Date lastAccessTime,
+			Date expirationTime,
+			Short level,
+			Integer flags,
+			ImageField image,
+			List<String> comments)
+	{
+		setGroupId(null);
+		setGroupName(null);
+		setCreationTime(null);
+		setLastModificationTime(null);
+		setLastAccessTime(null);
+		setExpirationTime(null);
+		setImage(null);
+		setLevel(null);
+		setFlags(null);
+		setComments(new ArrayList<Field>());
+		setUnknowns(new ArrayList<Field>());
+		
+		setGroupId(new IdField((short) 0x0001, id));
+		
+		if (groupName != null)
+			setGroupName(new TextField((short)0x0002, groupName));
+		
+		if (creationTime != null)
+			setCreationTime(new DateField((short) 0x0003, creationTime));
+		
+		if (lastModificationTime != null)
+			setLastModificationTime(new DateField((short) 0x0004, lastModificationTime));
+		
+		if (lastAccessTime != null)
+			setLastAccessTime(new DateField((short) 0x0005, lastAccessTime));
+		
+		if (expirationTime != null)
+			setExpirationTime(new DateField((short) 0x0006, expirationTime));
+		
+		setImage(null);
+		
+		if (level != null)
+			setLevel(new LevelField((short) 0x0008, level));
+		
+		if (flags != null)
+			setFlags(new FlagsField((short) 0x0009, flags));
+		
+		if (comments != null) {
+			ArrayList<Field> c = new ArrayList<Field>();
+			for(String comment : comments) {
+				c.add(new TextField((short) 0x0000, comment));
+			}
+			setComments(c);
+		}
+		// setUnknowns(new ArrayList<Field>());
+	}
+	
 	public Group() {
 		super();
 	}

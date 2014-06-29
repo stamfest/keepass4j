@@ -1,6 +1,7 @@
 package pl.sind.keepass.kdb.v1;
 
 import java.nio.ByteBuffer;
+import java.util.UUID;
 
 import pl.sind.keepass.util.Utils;
 
@@ -8,6 +9,10 @@ public class UUIDField extends Field {
 
 	public UUIDField(short fieldType, int fieldSize, ByteBuffer data) {
 		super(fieldType, fieldSize, UUID_FIELD_SIZE, data);
+	}
+
+	public UUIDField(short fieldType) {
+		super(fieldType, Utils.fromHexString(UUID.randomUUID().toString().replaceAll("-", "")));
 	}
 
 	public String getUuid() {

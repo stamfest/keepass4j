@@ -16,6 +16,7 @@ package pl.sind.keepass.kdb.v1;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import pl.sind.keepass.util.Utils;
 
 public class Field {
 	public static final int DATE_FIELD_SIZE = 5;
@@ -41,6 +42,22 @@ public class Field {
 		this.fieldSize = fieldSize;
 		this.fieldData = new byte[fieldSize];
 		data.get(fieldData);
+	}
+	
+	public Field(short fieldType, int intValue) {
+		super();
+		this.fieldType = fieldType;
+		
+		fieldSize = 4;
+		fieldData = new byte[fieldSize];
+		Utils.intTobytes(intValue, fieldData);
+	}
+	
+	public Field(short fieldType, byte[] value) {
+		super();
+		this.fieldType = fieldType;
+		fieldSize = value.length;
+		fieldData = Arrays.copyOf(value, value.length);
 	}
 
 	public short getFieldType() {

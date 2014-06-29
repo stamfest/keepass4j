@@ -136,7 +136,12 @@ public class Utils {
 		bytes[0] = (byte) (value & 0xff);
 	}
 	
-	
+	public static byte[] shortTobytes(short value) {
+		byte[] bytes = new byte[2];
+		shortTobytes(value, bytes);
+		return bytes;
+	}
+
 	public static short bytesToShort(byte[] data) {
 		short value=(short) (data[1] & 0xff);
 		value <<= 8;

@@ -11,6 +11,10 @@ public class DateField extends Field {
 		super(fieldType, fieldSize,DATE_FIELD_SIZE, data);
 	}
 
+	DateField(short fieldType, Date date) {
+		super(fieldType, Utils.packDate(date));
+	}
+
 	public Date getDate(){
 		return Utils.unpackDate(getFieldData());
 	}

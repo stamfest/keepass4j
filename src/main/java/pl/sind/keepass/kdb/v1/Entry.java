@@ -14,6 +14,8 @@
  */
 package pl.sind.keepass.kdb.v1;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -62,6 +64,88 @@ public class Entry {
 		this.binaryData = binaryData;
 		this.comments = comments;
 		this.unknowns = unknowns;
+	}
+
+	public void set(int groupId, 
+			Integer imageId, 
+			String title,
+			String url,
+			String username,
+			String password, String notes,
+			Date creationTime,
+			Date lastModificationTime,
+			Date lastAccessTime,
+			Date expirationTime,
+			String binaryDescription,
+			byte[] binaryData,
+			List<String> comments)
+	{
+		setGroupId(null);
+		setImageId(null);
+		setTitle(null);
+		setUrl(null);
+		setUsername(null);
+		setPassword(null);
+		setNotes(null);
+		setCreationTime(null);
+		setLastModificationTime(null);
+		setLastAccessTime(null);
+		setExpirationTime(null);
+		setBinaryDescription(null);
+		setBinaryData(null);
+		setComments(new ArrayList<Field>());
+			
+		if (this.uuid == null) {
+		    setUuid(new UUIDField((short) 0x0001));
+		}
+		
+		setGroupId(new IdField((short) 0x0002, groupId));
+		
+		if (imageId != null) 
+		    setImageId(new IdField((short) 0x0003, imageId));
+		
+		if (title != null)
+		    setTitle(new TextField((short) 0x0004, title));
+		
+		if (url != null)
+		    setUrl(new TextField((short) 0x0005, url));
+		
+		if (username != null)
+		    setUsername(new TextField((short) 0x0006, username));
+		
+		if (password != null)
+		    setPassword(new TextField((short) 0x0007, password));
+		
+		if (notes != null)
+		    setNotes(new TextField((short) 0x0008, notes));
+		
+		if (creationTime != null)
+		    setCreationTime(new DateField((short) 0x0009, creationTime));
+		
+		if (lastModificationTime != null)
+		    setLastModificationTime(new DateField((short) 0x000a, lastModificationTime));
+		
+		if (lastAccessTime != null)
+		    setLastAccessTime(new DateField((short) 0x000b, lastAccessTime));
+	
+		if (expirationTime != null)
+		    setExpirationTime(new DateField((short) 0x000C, expirationTime));
+		
+		if (binaryDescription != null)
+		    setBinaryDescription(new TextField((short) 0x000D, binaryDescription));
+		
+		if (binaryData != null)
+		    setBinaryData(new BinnaryField((short) 0x000E, binaryData));
+			
+		if (comments != null) {
+			ArrayList<Field> c = new ArrayList<Field>();
+			for(String comment : comments) {
+				c.add(new TextField((short) 0x0000, comment));
+			}
+		
+			setComments(c);
+		}
+		setUnknowns(new ArrayList<Field>());
 	}
 
 	public UUIDField getUuid() {
